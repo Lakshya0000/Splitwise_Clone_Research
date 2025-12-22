@@ -61,10 +61,10 @@ To avoid the "Sync Latency" complaints, the architecture should be "Local-First"
 
 ```mermaid
 graph TD
-    User[User App] -->|1. Instant Write| LocalDB[Local Database (SQLite/Realm)]
-    LocalDB -->|2. Sync Background| API[Backend API]
-    API -->|3. Broadcast Update| Socket[Real-Time Server]
-    Socket -->|4. Push Changes| Friend[Friend's App]
+    User["User App"] -->|1. Instant Write| LocalDB["Local Database (SQLite/Realm)"]
+    LocalDB -->|2. Sync Background| API["Backend API"]
+    API -->|3. Broadcast Update| Socket["Real-Time Server"]
+    Socket -->|4. Push Changes| Friend["Friend's App"]
     
     subgraph "Why this wins"
     direction TB
