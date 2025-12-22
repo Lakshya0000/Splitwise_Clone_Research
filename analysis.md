@@ -88,6 +88,62 @@ To solve the "Sync Lag" problem, we will build a "Real-Time First" system.
 *   **Instant:** It feels faster because it saves to the phone first, then syncs.
 
 ### Roadmap
+
 *   **Phase 1 (The Fix):** A clean app with **Unlimited Expenses** and **Groups**. Target the users leaving Splitwise right now.
+
 *   **Phase 2 (The Polish):** Add "Debt Simplification" math and Receipt Uploads.
+
 *   **Phase 3 (Sustainability):** Add optional paid features that *don't* block basic usage (like AI receipt scanning).
+
+
+
+---
+
+
+
+## 5. The "Why" Analysis: Root Causes of Splitwise's Failure
+
+To build a better product, we must understand *why* Splitwise made these decisions. Our research confirms this was a **Business Strategy**, not a Technical Necessity.
+
+
+
+### A. The VC Pressure (Business Reason)
+
+*   **The Trigger:** Splitwise raised **$20 Million** (Series A) in 2021. Investors demand high returns.
+
+*   **The Trap:** The free product was "too good." Users had no reason to upgrade.
+
+*   **The Result:** They intentionally crippled the free tier (the "3-expense limit") to *force* subscriptions. They are trading user loyalty for short-term revenue.
+
+*   **Our Advantage:** We do not have VC overlords. We can optimize for *user growth* rather than *immediate extraction*.
+
+
+
+### B. The Cost Myth (Technical Reality)
+
+*   **Text is Cheap:** Storing "Alice paid Bob 
+0" takes ~100 bytes. 1 million expenses cost pennies to host. Limiting this to "3 per day" is purely artificial.
+
+*   **Images are Expensive:** Storing high-res receipt photos *does* cost money (S3 storage/bandwidth).
+
+*   **Our Strategy:** Offer **Unlimited Text Expenses** for free. Limit *heavy* features like 4K Receipt Storage or AI Scanning to a paid/supported tier later.
+
+
+
+### C. Technical Debt (Why they are slow)
+
+*   **Legacy Sync:** Splitwise is 10+ years old. Their sync likely uses older methods (polling), leading to the "I added it but you don't see it" lag.
+
+*   **SMS Dependency:** Their reliance on Phone Number + SMS OTP is expensive and fragile (login loops).
+
+*   **Our Advantage:** We will use **Modern Auth** (Email/Google) and **WebSockets** for instant, reliable sync.
+
+
+
+---
+
+
+
+## 6. Conclusion
+
+The analysis confirms a classic "SaaS over-optimization" failure. Splitwise squeezed their free tier too hard, turning their biggest asset (the network effect of free users) into a liability.
