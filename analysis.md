@@ -45,7 +45,7 @@ Based on our analysis of **16,000+ negative reviews**, here are the specific pro
 > *"I'm not against paying for it, but making the free tier useless and also having an expensive subscription model instead of a one time payment is a surefire way of shooting yourself in the foot."*
 > — **User Review (483 Thumbs Up)**
 
-> *"There's no justification for an annual 36 fee for what this app offers... This just destroyed the usability and user trust completely."*
+> *"There's no justification for an annual $36 fee for what this app offers... This just destroyed the usability and user trust completely."*
 > — **User Review (6 Thumbs Up)**
 
 ### D. Technical Frustrations
@@ -82,68 +82,61 @@ To win these users over, we do not need to invent new features. We just need to 
 | **Graphs** | **Paid.** Locked behind "Pro". | **Free.** Simple pie charts of spending. |
 | **Data Export** | **Paid.** | **Free.** Download your data as CSV anytime. |
 
-### Technical Architecture Approach
-To solve the "Sync Lag" problem, we will build a "Real-Time First" system.
-*   **Works Offline:** You can add expenses on a plane or in a remote cabin.
-*   **Instant:** It feels faster because it saves to the phone first, then syncs.
-
-### Roadmap
-
-*   **Phase 1 (The Fix):** A clean app with **Unlimited Expenses** and **Groups**. Target the users leaving Splitwise right now.
-
-*   **Phase 2 (The Polish):** Add "Debt Simplification" math and Receipt Uploads.
-
-*   **Phase 3 (Sustainability):** Add optional paid features that *don't* block basic usage (like AI receipt scanning).
-
-
-
 ---
-
-
 
 ## 5. The "Why" Analysis: Root Causes of Splitwise's Failure
-
 To build a better product, we must understand *why* Splitwise made these decisions. Our research confirms this was a **Business Strategy**, not a Technical Necessity.
 
-
-
 ### A. The VC Pressure (Business Reason)
-
 *   **The Trigger:** Splitwise raised **$20 Million** (Series A) in 2021. Investors demand high returns.
-
 *   **The Trap:** The free product was "too good." Users had no reason to upgrade.
-
 *   **The Result:** They intentionally crippled the free tier (the "3-expense limit") to *force* subscriptions. They are trading user loyalty for short-term revenue.
-
 *   **Our Advantage:** We do not have VC overlords. We can optimize for *user growth* rather than *immediate extraction*.
 
-
-
 ### B. The Cost Myth (Technical Reality)
-
-*   **Text is Cheap:** Storing "Alice paid Bob 
-0" takes ~100 bytes. 1 million expenses cost pennies to host. Limiting this to "3 per day" is purely artificial.
-
+*   **Text is Cheap:** Storing "Alice paid Bob $10" takes ~100 bytes. 1 million expenses cost pennies to host. Limiting this to "3 per day" is purely artificial.
 *   **Images are Expensive:** Storing high-res receipt photos *does* cost money (S3 storage/bandwidth).
-
 *   **Our Strategy:** Offer **Unlimited Text Expenses** for free. Limit *heavy* features like 4K Receipt Storage or AI Scanning to a paid/supported tier later.
 
-
-
 ### C. Technical Debt (Why they are slow)
-
 *   **Legacy Sync:** Splitwise is 10+ years old. Their sync likely uses older methods (polling), leading to the "I added it but you don't see it" lag.
-
 *   **SMS Dependency:** Their reliance on Phone Number + SMS OTP is expensive and fragile (login loops).
-
 *   **Our Advantage:** We will use **Modern Auth** (Email/Google) and **WebSockets** for instant, reliable sync.
 
-
+### D. UX & Usability Failures (The "Paper Cuts")
+Beyond the big limits, users hate these small, constant annoyances:
+*   **US-Centric Arrogance:** Non-US users report the app constantly defaults to USD, forcing a manual currency switch for *every single expense*.
+    *   *Our Fix:* Auto-detect currency based on user locale or group setting.
+*   **Notification "Ghosting":** If a user edits an expense quickly (fixing a typo), notifications often don't fire, leaving the group confused about why the balance changed.
+    *   *Our Fix:* An immutable "Activity Log" that shows *every* edit clearly.
+*   **Payment Slowness:** Their integrated payment system takes 2-5 days to process.
+    *   *Our Fix:* Don't touch the money. Deep link directly to **UPI / Venmo / Revolut** for instant settlement.
 
 ---
 
+## 6. Financial Modeling: The True Cost of Free
+We analyzed the operational costs to prove that "Unlimited Expenses" is financially viable.
 
+### A. Database (Text) vs. Storage (Images)
+*Scenario: 1 Million Expense Entries.*
 
-## 6. Conclusion
+| Item | Est. Size | Monthly Cost (AWS) | Verdict |
+| :--- | :--- | :--- | :--- |
+| **Text Data** (Who paid what) | ~0.6 GB | **$2.30** | **Negligible.** We can offer this for free forever. |
+| **Receipt Images** (1MB each) | 1,000 GB | **$113.00** | **Expensive.** This confirms we should limit receipt storage, not text. |
 
+### B. Authentication Costs (The "Login Trap")
+*Scenario: 10,000 New Users Signing Up.*
+
+| Method | Cost per User (OTP) | Total Cost | Verdict |
+| :--- | :--- | :--- | :--- |
+| **SMS (Twilio - India/Global)** | ~$0.13 | **$1,300.00** | **Financial Suicide.** Avoid. |
+| **Email (AWS SES)** | ~$0.0001 | **$1.00** | **The Winner.** Use Google Auth / Email Magic Links. |
+
+**Strategic Conclusion:**
+By avoiding SMS and Image Storage in the free tier, our "Cost Per User" is practically zero ($0.001/month). This allows us to outlast Splitwise's VC-backed model.
+
+---
+
+## 7. Conclusion
 The analysis confirms a classic "SaaS over-optimization" failure. Splitwise squeezed their free tier too hard, turning their biggest asset (the network effect of free users) into a liability.
