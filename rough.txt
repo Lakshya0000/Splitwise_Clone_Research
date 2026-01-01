@@ -1,0 +1,26 @@
+Screens phase 1
+1) Splash screen : name : koshbook, splitquick/quicksplit , splitquik.in ,logo
+2) No login screen : take direct to home screen with option to create a new group
+3) Show list of groups on the home screen. 
+4) create group screen : create a new group with name and members,
+2) Home screen : list of groups
+3) Group screen : list of expenses
+4) Expense screen : details of the expense
+5) Add expense screen : add a new expense
+6) Edit expense screen : edit an existing expense
+7) Settings screen : settings of the app
+12) Logout screen : logout of the app
+13) Login screen : login to the app
+
+BAckend architecture:Go with grpc
+1) auth-service: for authentication and authorization : login, signup, logout
+2) expense-service: for expense management : add, edit, delete
+3) group-service: for group management : add, edit, delete
+4) user-service: for user management : add, edit, delete
+5) communication-service: for communication with the user : send notifications, send emails, send sms
+6) report-service: for generating reports : generate reports in pdf, excel, csv
+
+Frontend architecture: Capacitor with flutter
+
+
+
